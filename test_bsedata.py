@@ -30,6 +30,7 @@ from bsedata.exceptions import InvalidStockException
 
 b = BSE(update_codes=True)
 
+<<<<<<< HEAD
 def test_str():
     assert str(b) == "Driver Class for Bombay Stock Exchange (BSE)"
 
@@ -74,3 +75,56 @@ def test_getPeriodTrend_invalid_period():
         b.getPeriodTrend('534976', '2M')
 
     assert err_info.value.args[0] == "timePeriod should be one of the following options '1M', '3M', '6M' and '12M'"
+=======
+l = pd.read_csv('strips/strips_list.csv')
+ll = l['Security Code']
+li=[]
+# print(ll[0],type(ll[0]))
+cols = [
+    'currentValue',
+    'change',
+    'pChange',
+    'updatedOn',
+    'priceBand',
+    'securityID',
+    'scripCode',
+    'group',
+    'faceValue',
+    'industry',
+    'previousClose',
+    'previousOpen',
+    'dayHigh',
+    'dayLow',
+    '52weekHigh',
+    '52weekLow',
+    'weightedAvgPrice',
+    'totalTradedValue',
+    'totalTradedQuantity',
+    '2WeekAvgQuantity',
+    'marketCapFull',
+    'marketCapFreeFloat',
+    'upperPriceBand',
+    'lowerPriceBand']
+df = pd.DataFrame(columns=cols)
+
+ok = b.getQuote(str(530199))
+oki = dict((key,value) for key, value in ok.items() if key in cols)
+df2 = pd.DataFrame(oki, index=[1])
+# print(df2)
+# pprint(b.getQuote(str(530199)))
+ll = ll[:10]
+i = 1
+for a in tqdm(ll):
+    try:
+        q = b.getQuote(str(a))
+        oki = dict((key,value) for key, value in q.items() if key in cols)
+        df2 = pd.DataFrame(oki, index=[i])
+        print(df2)
+        df = df.append(df2)
+        i=i+1
+    except:
+        li.append(a)
+    # pprint(q)
+df = df[cols]
+df.to_csv('market_test_data.csv')
+>>>>>>> added DB functions
